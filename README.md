@@ -75,7 +75,7 @@ npm install @inertiajs/react react react-dom
 
 ### Initialize the Inertia app
 
-resource/js/app.jax
+resource/js/app.jsx
 
 ```code
 import { createInertiaApp } from '@inertiajs/react'
