@@ -59,6 +59,7 @@ php artisan inertia:middleware
 ```
 
 ```code
+// app/http/kernel.php
 'web' => [
     // ...
     \App\Http\Middleware\HandleInertiaRequests::class,
