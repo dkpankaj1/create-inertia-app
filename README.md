@@ -64,6 +64,15 @@ php artisan inertia:middleware
     // ...
     \App\Http\Middleware\HandleInertiaRequests::class,
 ],
+
+// laravel 11.*
+use App\Http\Middleware\HandleInertiaRequests;
+
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->web(append: [
+        HandleInertiaRequests::class,
+    ]);
+})
 ```
 
 ## Inertia JS Client Side
