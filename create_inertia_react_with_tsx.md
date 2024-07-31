@@ -43,7 +43,7 @@ Next, setup the root template that will be loaded on the first page visit to you
     <!-- Scripts and Styles -->
     @routes
     @viteReactRefresh
-    @vite('resources/js/app.jsx')
+    @vite('resources/js/app.tsx')
     @inertiaHead
   </head>
   <body>
