@@ -82,6 +82,39 @@ use App\Http\Middleware\HandleInertiaRequests;
 ```bash
 npm install @inertiajs/react react react-dom
 ```
+###  Install TypeScript and Necessary Packages
+Install TypeScript and other necessary packages:
+
+```code
+npm install typescript @types/react @types/react-dom
+```
+
+### Configure TypeScript
+Initialize TypeScript configuration:
+```code
+npx tsc --init
+```
+Then, you need to edit tsconfig.json to suit your project setup. Here is a simple example configuration:
+```code
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "jsx": "react",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["resources/js/*"]
+    }
+  },
+  "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx"]
+}
+
+```
 
 ### Initialize the Inertia app
 
