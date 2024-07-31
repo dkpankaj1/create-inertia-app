@@ -116,8 +116,7 @@ Then, you need to edit tsconfig.json to suit your project setup. Here is a simpl
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
         "paths": {
-            "@/*": ["./resources/js/*"],
-            "ziggy-js": ["./vendor/tightenco/ziggy"]
+            "@/*": ["./resources/js/*"]
         }
     },
     "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts"]
