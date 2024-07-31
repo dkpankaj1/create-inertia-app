@@ -149,7 +149,7 @@ createInertiaApp({
 ## Setup Vite React Plugin
 
 ```bash
-npm i @vitejs/plugin-react @types/vite
+npm i @vitejs/plugin-react
 ```
 
 ```code
