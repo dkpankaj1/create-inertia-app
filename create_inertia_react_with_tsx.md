@@ -169,3 +169,13 @@ export default defineConfig({
 
 
 ```
+
+## Apply Fixes
+```code
+// js/types/global.d.ts
+
+import { route as ziggyRoute } from '../../../vendor/tightenco/ziggy'
+declare global {
+    var route: typeof ziggyRoute;
+}
+```
