@@ -43,7 +43,8 @@ Next, setup the root template that will be loaded on the first page visit to you
     <!-- Scripts and Styles -->
     @routes
     @viteReactRefresh
-    @vite('resources/js/app.jsx')
+    @vite('resources/js/app.tsx')
+    {{-- @vite('resources/js/app.jsx') for jsx --}}
     @inertiaHead
   </head>
   <body>
@@ -150,11 +151,13 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.jsx'],
+            // input: ['resources/css/app.css', 'resources/js/app.jsx'], fot jsx
+            input: ['resources/css/app.css', 'resources/js/app.tsx'],
             refresh: true,
         }),
         react()
     ],
 });
+
 
 ```
