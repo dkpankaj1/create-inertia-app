@@ -66,11 +66,10 @@ php artisan inertia:middleware
 ],
 
 // laravel 11.*
-use App\Http\Middleware\HandleInertiaRequests;
 
 ->withMiddleware(function (Middleware $middleware) {
     $middleware->web(append: [
-        HandleInertiaRequests::class,
+         \App\Http\Middleware\HandleInertiaRequests::class,
     ]);
 })
 ```
@@ -174,7 +173,12 @@ export default defineConfig({
 ```code
 // js/types/global.d.ts
 
+/// <reference types="vite/client" />
 import { route as ziggyRoute } from '../../../vendor/tightenco/ziggy'
+
+export interface ImportMeta {
+    glob: (pattern: string, options?: { eager?: boolean }) => Record<string, any>;
+}
 declare global {
     var route: typeof ziggyRoute;
 }
