@@ -182,3 +182,7 @@ declare global {
     var route: typeof ziggyRoute;
 }
 ```
+## install node dependency at once
+```code
+npm install @inertiajs/react react react-dom typescript @types/node @types/react @types/react-dom @vitejs/plugin-react
+```
