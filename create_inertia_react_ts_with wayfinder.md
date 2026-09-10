@@ -61,25 +61,28 @@ npm install -D @vitejs/plugin-react typescript @types/react @types/react-dom
 
 ```json
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["resources/js/*"]
+    "compilerOptions": {
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "skipLibCheck": true,
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "strict": true,
+        "paths": {
+            "@/*": ["resources/js/*"]
+        },
+        "types": ["vite/client"]
     },
-    "types": ["vite/client"]
-  },
-  "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts"]
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.tsx",
+        "resources/js/**/*.d.ts"
+    ]
 }
 ```
 
