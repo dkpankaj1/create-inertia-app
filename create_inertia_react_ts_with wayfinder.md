@@ -37,18 +37,23 @@ Next, setup the root template that will be loaded on the first page visit to you
 <!-- resource/view/app.blade.php-->
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <!-- Scripts and Styles -->
     @viteReactRefresh
-    @vite('resources/js/app.tsx')
-    @inertiaHead
-  </head>
-  <body>
-    @inertia
-  </body>
+    @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+    <x-inertia::head>
+        <title>{{ config('app.name', 'Laravel') }}</title>
+    </x-inertia::head>
+</head>
+
+<body>
+    <x-inertia::app />
+</body>
+
 </html>
+
 ```
 
 ### Middleware
