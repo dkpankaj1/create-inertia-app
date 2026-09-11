@@ -42,7 +42,7 @@ Next, setup the root template that will be loaded on the first page visit to you
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+    @vite(['resources/css/app.css', 'resources/js/app.tsx'])
     <x-inertia::head>
         <title>{{ config('app.name', 'Laravel') }}</title>
     </x-inertia::head>
@@ -166,7 +166,7 @@ export default defineConfig({
              input: ["resources/css/app.css", "resources/js/app.tsx"],
             refresh: true,
         }),
-       wayfinder(),
+       wayfinder({ formVariants: true }),
         react(),
     ],
     server: {
