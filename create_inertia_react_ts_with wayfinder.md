@@ -1,216 +1,188 @@
-## 1. Server-side: Inertia adapter
+# How to setup project
+
+-   Installation
+-   Setup Inertia JS
+-   Inertia JS Server Side
+-   Inertia JS Client Side
+-   Setup Vite React Plugin
+
+## Installation
+
+install fresh new laravel project
+
+```bash
+laravel new project_name
+```
+
+## Setup Inertia JS
+
+Inertia is a new approach to building classic server-driven web apps. We call it the modern monolith.
+
+## Inertia JS Server Side
+
+### Install dependencies
+
+First, install the Inertia server-side adapter using the Composer package manager.
 
 ```bash
 composer require inertiajs/inertia-laravel
+composer require tightenco/ziggy
 ```
 
-Publish the middleware:
+### Root template
+
+Next, setup the root template that will be loaded on the first page visit to your application. This will be used to load your site assets (CSS and JavaScript), and will also contain a root <div> in which to boot your JavaScript application.
+
+```code
+<!-- resource/view/app.blade.php-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <!-- Scripts and Styles -->
+    @routes
+    @viteReactRefresh
+    @vite('resources/js/app.tsx')
+    @inertiaHead
+  </head>
+  <body>
+    @inertia
+  </body>
+</html>
+```
+
+### Middleware
 
 ```bash
 php artisan inertia:middleware
 ```
 
-This creates `app/Http/Middleware/HandleInertiaRequests.php`.
-
-## 2. Register the middleware
-
-In `app.php`, add `use App\Http\Middleware\HandleInertiaRequests;` at the top and append it inside `withMiddleware`:
-
-```php
-use App\Http\Middleware\HandleInertiaRequests;
-
-return Application::configure(basePath: dirname(__DIR__))
+```code
+// app/http/kernel.php
+'web' => [
     // ...
-    ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(append: [
-            HandleInertiaRequests::class,
-        ]);
-    })
-    // ...
-    ->create();
+    \App\Http\Middleware\HandleInertiaRequests::class,
+],
+
+// laravel 11.*
+
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->web(append: [
+         \App\Http\Middleware\HandleInertiaRequests::class,
+    ]);
+})
 ```
 
-## 3. Create the root template
+## Inertia JS Client Side
 
-Create `resources/views/app.blade.php`:
-
-```blade
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        @viteReactRefresh
-        @vite(['resources/css/app.css', 'resources/js/app.tsx'])
-        <x-inertia::head />
-    </head>
-    <body class="font-sans antialiased">
-        <x-inertia::app />
-    </body>
-</html>
-```
-
-## 4. Client-side: install React + TypeScript deps
+### Install dependencies
 
 ```bash
 npm install @inertiajs/react react react-dom
-npm install -D @vitejs/plugin-react typescript @types/react @types/react-dom
 ```
 
-## 5. Add `tsconfig.json`
+### Install TypeScript and Necessary Packages
 
-```json
+Install TypeScript and other necessary packages:
+
+```bash
+npm install typescript @types/node @types/react @types/react-dom
+```
+
+### Configure TypeScript
+
+Initialize TypeScript configuration:
+
+```code
+npx tsc --init
+```
+
+Then, you need to edit tsconfig.json to suit your project setup. Here is a simple example configuration:
+
+```code
+// tsconfig.json
 {
     "compilerOptions": {
-        "target": "ES2020",
-        "useDefineForClassFields": true,
-        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "allowJs": true,
         "module": "ESNext",
-        "skipLibCheck": true,
         "moduleResolution": "bundler",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
         "jsx": "react-jsx",
         "strict": true,
+        "isolatedModules": true,
+        "target": "ESNext",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
         "paths": {
-            "@/*": ["resources/js/*"]
-        },
-        "types": ["vite/client"]
+            "@/*": ["./resources/js/*"]
+        }
     },
-    "include": [
-        "resources/js/**/*.ts",
-        "resources/js/**/*.tsx",
-        "resources/js/**/*.d.ts"
-    ]
+    "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts"]
 }
+
+
 ```
 
-The `@/*` alias is what Wayfinder's generated imports (`@/actions/...`, `@/routes/...`) rely on.
+### Initialize the Inertia app
 
-## 6. Replace `app.js` with `app.tsx`
+resource/js/app.tsx
 
-Delete `app.js` and create `resources/js/app.tsx`:
-
-```tsx
+```code
 import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 
 createInertiaApp({
-  resolve: (name) =>
-    resolvePageComponent(
-      `./Pages/${name}.tsx`,
-      import.meta.glob('./Pages/**/*.tsx'),
-    ),
+  resolve: name => {
+    const pages = import.meta.glob<{ default: React.ComponentType }>('./Pages/**/*.tsx', { eager: true })
+    return pages[`./Pages/${name}.tsx`]
+  },
   setup({ el, App, props }) {
     createRoot(el).render(<App {...props} />)
   },
 })
 ```
 
-## 7. Rename and update the Vite config
+## Setup Vite React Plugin
 
-Rename `vite.config.js` → `vite.config.ts`:
+```bash
+npm i @vitejs/plugin-react
+```
 
-```ts
-import { defineConfig } from 'vite'
-import laravel from 'laravel-vite-plugin'
-import { bunny } from 'laravel-vite-plugin/fonts'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import { wayfinder } from '@laravel/vite-plugin-wayfinder'
-import path from 'node:path'
+```code
+// vite.config.js
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.tsx'],
+            input: 'resources/js/app.tsx',
             refresh: true,
-            fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
-                }),
-            ],
         }),
         react(),
-        tailwindcss(),
-        wayfinder(),
     ],
-    resolve: {
-        alias: {
-            "@": `${import.meta.dirname}/resources/js`,
-        },
-    },
-    server: {
-        watch: {
-            ignored: ['**/storage/framework/views/**'],
-        },
-    },
-})
+});
+
+
 ```
 
-## 8. Install Wayfinder (server + Vite plugin)
+## Apply Fixes
+```code
+// js/types/global.d.ts
 
-```bash
-composer require laravel/wayfinder
-npm install -D @laravel/vite-plugin-wayfinder
-```
+/// <reference types="vite/client" />
+import { route as ziggyRoute } from '../../../vendor/tightenco/ziggy'
 
-Then generate the TypeScript definitions once:
-
-```bash
-php artisan wayfinder:generate
-```
-
-This creates `resources/js/wayfinder/`, `resources/js/actions/`, and `resources/js/routes/`. You can add those three directories to `.gitignore` since they're fully regenerated.
-
-## 9. Wire up your first page
-
-Controller/route (`web.php`):
-
-```php
-use Inertia\Inertia;
-
-Route::get('/', fn () => Inertia::render('Home'));
-```
-
-Page component (`resources/js/Pages/Home.tsx`):
-
-```tsx
-export default function Home() {
-  return <h1 className="text-2xl font-semibold">Hello, Inertia + React!</h1>
+export interface ImportMeta {
+    glob: (pattern: string, options?: { eager?: boolean }) => Record<string, any>;
+}
+declare global {
+    var route: typeof ziggyRoute;
 }
 ```
-
-## 10. Run it
-
-```bash
-composer run dev
+## install node dependency at once
+```code
+npm install @inertiajs/react react react-dom typescript @types/node @types/react @types/react-dom @vitejs/plugin-react
 ```
-
-or separately: `php artisan serve` + `npm run dev`.
-
-## Wayfinder usage in React
-
-With an action on `PostController@show` and named route `post.show`:
-
-```tsx
-import { Link, useForm } from '@inertiajs/react'
-import { show } from '@/actions/App/Http/Controllers/PostController'
-
-// Link to a route
-<Link href={show(1)}>Post #1</Link>          // { url: "/posts/1", method: "get" }
-
-// URL only
-show.url(1)                                   // "/posts/1"
-
-// Named route
-import { show as postShow } from '@/routes/post'
-postShow(1)
-
-// Forms
-const form = useForm({ name: 'New post' })
-form.submit(store())                          // auto-resolves URL + method
-```
-
