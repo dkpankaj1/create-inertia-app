@@ -179,14 +179,11 @@ export default defineConfig({
 // js/types/global.d.ts
 
 /// <reference types="vite/client" />
-import { route as ziggyRoute } from '../../../vendor/tightenco/ziggy'
 
 export interface ImportMeta {
     glob: (pattern: string, options?: { eager?: boolean }) => Record<string, any>;
 }
-declare global {
-    var route: typeof ziggyRoute;
-}
+
 ```
 ## install node dependency at once
 ```code
