@@ -26,7 +26,7 @@ First, install the Inertia server-side adapter using the Composer package manage
 
 ```bash
 composer require inertiajs/inertia-laravel
-composer require tightenco/ziggy
+composer require laravel/wayfinder
 ```
 
 ### Root template
@@ -41,7 +41,6 @@ Next, setup the root template that will be loaded on the first page visit to you
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <!-- Scripts and Styles -->
-    @routes
     @viteReactRefresh
     @vite('resources/js/app.tsx')
     @inertiaHead
@@ -154,6 +153,7 @@ npm i @vitejs/plugin-react
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
+import { wayfinder } from "@laravel/vite-plugin-wayfinder";
 
 export default defineConfig({
     plugins: [
@@ -161,6 +161,7 @@ export default defineConfig({
             input: 'resources/js/app.tsx',
             refresh: true,
         }),
+       wayfinder(),
         react(),
     ],
 });
