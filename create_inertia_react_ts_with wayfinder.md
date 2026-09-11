@@ -92,8 +92,8 @@ Install TypeScript and other necessary packages:
 
 ```bash
 npm install typescript @types/node @types/react @types/react-dom
+npm i -D @laravel/vite-plugin-wayfinder
 ```
-
 ### Configure TypeScript
 
 Initialize TypeScript configuration:
